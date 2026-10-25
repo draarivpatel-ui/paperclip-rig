@@ -958,7 +958,12 @@
       var stage = byId('pixel');
       if (stage && win.IntersectionObserver) {
         var io = new win.IntersectionObserver(function (entries) {
-          entries.forEach(function (en) { px.visible = en.isIntersecting; });
+          entries.forEach(function (en) {
+            px.visible = en.isIntersecting;
+            if (px.visible && px.frames.length) {
+              drawPreview(Math.min(px.shown < 0 ? px.frame : px.shown, px.frames.length - 1));
+            }
+          });
         });
         io.observe(stage);
       }
@@ -984,6 +989,14 @@
       if (at.format === 'godot') { return E.exportGodotRegions(at.atlas, name); }
       if (at.format === 'css') { return E.exportCssSprites(at.atlas, name, 'sprite'); }
       return E.exportTexturePackerHash(at.atlas, name);
+    }
+
+    var ATLAS_HINT = 'Hatching marks wasted pixels. Dashed boxes include padding and extrude.';
+
+    function probeAtlas(text) {
+      var cap = byId('atlas-caption');
+      var hint = cap && cap.querySelector ? cap.querySelector('.plate-hint') : null;
+      if (hint) { hint.textContent = text === null ? ATLAS_HINT : text; }
     }
 
     function renderAtlas() {
@@ -1019,6 +1032,8 @@
         var title = svgEl('title', {});
         title.textContent = p.name + ', ' + p.w + ' by ' + p.h + ' at ' + p.x + ', ' + p.y;
         rect.appendChild(title);
+        on(rect, 'pointerover', function () { probeAtlas(p.name + ', ' + p.w + ' by ' + p.h + ' px at ' + p.x + ', ' + p.y); });
+        on(rect, 'pointerout', function () { probeAtlas(null); });
         atSvg.appendChild(rect);
       });
     }
@@ -1045,7 +1060,7 @@
           clearChildren(cap);
           cap.appendChild(htmlEl('span', {}, atlas.width + ' by ' + atlas.height + ' sheet, ' +
             atlas.placements.length + ' frames'));
-          cap.appendChild(htmlEl('span', { 'class': 'plate-hint' }, 'Hatching marks wasted pixels. Dashed boxes include padding and extrude.'));
+          cap.appendChild(htmlEl('span', { 'class': 'plate-hint' }, ATLAS_HINT));
         }
         var out = byId('at-output');
         if (out) { out.value = atDescriptor(); }

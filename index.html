@@ -9,6 +9,11 @@
   <meta property="og:title" content="Paperclip Vector &amp; Sprite Rig">
   <meta property="og:description" content="Rig the outline. Pack the sheet. Bezier editor, pixel animator and MaxRects atlas packer in one dependency free file.">
   <meta property="og:type" content="website">
+  <meta property="og:url" content="https://aariv.me/paperclip-rig/">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Paperclip Vector &amp; Sprite Rig">
+  <meta name="twitter:description" content="Rig the outline. Pack the sheet. Bezier editor, pixel animator and MaxRects atlas packer in one dependency free file.">
+  <meta name="theme-color" content="#F8F5EE">
   <link rel="icon" href="assets/svg/paperclip.svg" type="image/svg+xml">
   <link rel="preload" href="fonts/fraunces-var.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="fonts/hanken-grotesk-var.woff2" as="font" type="font/woff2" crossorigin>
@@ -38,7 +43,7 @@
     <!-- Vector bench is the hero: the editor is the first thing on screen -->
     <section class="hero" id="top" aria-labelledby="hero-title">
       <div class="hero-copy">
-        <h1 id="hero-title"><span class="word">Rig</span> <span class="word">the</span> <span class="word">outline.</span> <span class="word">Pack</span> <span class="word">the</span> <span class="word">sheet.</span></h1>
+        <h1 id="hero-title"><span class="sentence"><span class="word">Rig</span> <span class="word">the</span> <span class="word">outline.</span></span> <span class="sentence"><span class="word">Pack</span> <span class="word">the</span> <span class="word">sheet.</span></span></h1>
         <p class="lede">Drag a Bezier node, slide the tolerance, and watch a traced contour lose most of its points while the silhouette holds. Then paint a sprite, swap its palette and pack the frames into the smallest sheet that fits.</p>
         <p class="hero-note">A small open source workbench for vector paths, pixel sprites and texture atlases, with eighteen sample assets. One file of engine code, no dependencies.</p>
         <div class="cta-row">
@@ -77,63 +82,82 @@
         <p class="bench-intro">The editor flattens your curve into a dense trace, runs Ramer-Douglas-Peucker at the tolerance you pick, then refits smooth cubics through the points it kept. Sharp corners stay sharp. Every figure below is recomputed as you drag.</p>
       </div>
 
-      <div class="controls" role="group" aria-label="Vector bench controls">
-        <div class="field">
-          <label for="vec-asset">Artwork</label>
-          <select id="vec-asset" data-js="vec-asset"></select>
-        </div>
-        <div class="field">
-          <label for="vec-layer">Layer to edit</label>
-          <select id="vec-layer" data-js="vec-layer"></select>
-        </div>
-        <fieldset class="field segmented" aria-label="Handle behaviour">
-          <legend>Handles</legend>
-          <label class="seg"><input type="radio" name="handle-mode" value="smooth" checked><span>Smooth</span></label>
-          <label class="seg"><input type="radio" name="handle-mode" value="mirrored"><span>Mirrored</span></label>
-          <label class="seg"><input type="radio" name="handle-mode" value="free"><span>Free</span></label>
-        </fieldset>
-        <div class="field slider">
-          <label for="vec-epsilon">Tolerance</label>
-          <input id="vec-epsilon" data-js="vec-epsilon" type="range" min="0.05" max="6" step="0.05" value="0.6">
-          <output id="vec-epsilon-out" for="vec-epsilon">0.60 units</output>
-        </div>
-        <div class="field slider">
-          <label for="vec-precision">Decimals kept</label>
-          <input id="vec-precision" data-js="vec-precision" type="range" min="0" max="4" step="1" value="2">
-          <output id="vec-precision-out" for="vec-precision">2</output>
-        </div>
-        <div class="field checks">
-          <label class="check"><input id="vec-comb" data-js="vec-comb" type="checkbox" checked><span>Curvature comb</span></label>
-          <label class="check"><input id="vec-trace" data-js="vec-trace" type="checkbox" checked><span>Trace and kept points</span></label>
-        </div>
-      </div>
+      <div class="vector-workspace">
+        <figure class="plate-mirror">
+          <div class="plate-frame">
+            <svg class="plate-svg plate-svg-mirror" viewBox="0 0 120 120" aria-hidden="true" focusable="false">
+              <rect width="120" height="120" class="plate-ground"/>
+              <rect width="120" height="120" fill="url(#grid-fine)"/>
+              <rect width="120" height="120" fill="url(#grid-coarse)"/>
+              <use href="#vector-ghosts"/>
+              <use href="#vector-overlay"/>
+            </svg>
+          </div>
+          <figcaption class="plate-caption">
+            <span>Live view of the plate</span>
+            <a class="plate-jump" href="#vector">Edit on the plate</a>
+          </figcaption>
+        </figure>
+        <div class="vector-panels">
+          <div class="controls" role="group" aria-label="Vector bench controls">
+            <div class="field">
+              <label for="vec-asset">Artwork</label>
+              <select id="vec-asset" data-js="vec-asset"></select>
+            </div>
+            <div class="field">
+              <label for="vec-layer">Layer to edit</label>
+              <select id="vec-layer" data-js="vec-layer"></select>
+            </div>
+            <fieldset class="field segmented" aria-label="Handle behaviour">
+              <legend>Handles</legend>
+              <label class="seg"><input type="radio" name="handle-mode" value="smooth" checked><span>Smooth</span></label>
+              <label class="seg"><input type="radio" name="handle-mode" value="mirrored"><span>Mirrored</span></label>
+              <label class="seg"><input type="radio" name="handle-mode" value="free"><span>Free</span></label>
+            </fieldset>
+            <div class="field slider">
+              <label for="vec-epsilon">Tolerance</label>
+              <input id="vec-epsilon" data-js="vec-epsilon" type="range" min="0.05" max="6" step="0.05" value="0.6">
+              <output id="vec-epsilon-out" for="vec-epsilon">0.60 units</output>
+            </div>
+            <div class="field slider">
+              <label for="vec-precision">Decimals kept</label>
+              <input id="vec-precision" data-js="vec-precision" type="range" min="0" max="4" step="1" value="2">
+              <output id="vec-precision-out" for="vec-precision">2</output>
+            </div>
+            <div class="field checks">
+              <label class="check"><input id="vec-comb" data-js="vec-comb" type="checkbox" checked><span>Curvature comb</span></label>
+              <label class="check"><input id="vec-trace" data-js="vec-trace" type="checkbox" checked><span>Trace and kept points</span></label>
+            </div>
+          </div>
 
-      <div class="ledger-wrap">
-        <dl class="ledger" id="vec-readouts" aria-label="Measurements">
-          <div class="ledger-row"><dt>Trace points</dt><dd><output id="ro-trace">0</output></dd></div>
-          <div class="ledger-row"><dt>Points kept</dt><dd><output id="ro-kept">0</output></dd></div>
-          <div class="ledger-row"><dt>Trace as polyline</dt><dd><output id="ro-bytes-before">0 B</output></dd></div>
-          <div class="ledger-row"><dt>Simplified path</dt><dd><output id="ro-bytes-after">0 B</output></dd></div>
-          <div class="ledger-row"><dt>Size change</dt><dd><output id="ro-saved">0%</output></dd></div>
-          <div class="ledger-row"><dt>Worst drift</dt><dd><output id="ro-deviation">0</output></dd></div>
-          <div class="ledger-row"><dt>Editable nodes</dt><dd><output id="ro-nodes">0</output></dd></div>
-          <div class="ledger-row"><dt>Path length</dt><dd><output id="ro-length">0</output></dd></div>
-          <div class="ledger-row"><dt>Bounding box</dt><dd><output id="ro-bbox">0</output></dd></div>
-          <div class="ledger-row"><dt>Peak curvature</dt><dd><output id="ro-kmax">0</output></dd></div>
-        </dl>
-        <div class="pathbox">
-          <label for="vec-d">Simplified path data</label>
-          <textarea id="vec-d" data-js="vec-d" readonly rows="4" spellcheck="false"></textarea>
-          <div class="btn-row">
-            <button type="button" class="btn btn-ink" id="vec-copy">
-              <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><rect x="8" y="8" width="11" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M5 15V6.5A1.5 1.5 0 0 1 6.5 5H15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-              <span>Copy path</span>
-            </button>
-            <button type="button" class="btn btn-ink" id="vec-download">
-              <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><path d="M12 4v11M7 11l5 5 5-5M5 20h14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              <span>Download SVG</span>
-            </button>
-            <button type="button" class="btn btn-quiet" id="vec-reset">Reset layer</button>
+          <div class="ledger-wrap">
+            <dl class="ledger" id="vec-readouts" aria-label="Measurements">
+              <div class="ledger-row"><dt>Trace points</dt><dd><output id="ro-trace">0</output></dd></div>
+              <div class="ledger-row"><dt>Points kept</dt><dd><output id="ro-kept">0</output></dd></div>
+              <div class="ledger-row"><dt>Trace as polyline</dt><dd><output id="ro-bytes-before">0 B</output></dd></div>
+              <div class="ledger-row"><dt>Simplified path</dt><dd><output id="ro-bytes-after">0 B</output></dd></div>
+              <div class="ledger-row"><dt>Size change</dt><dd><output id="ro-saved">0%</output></dd></div>
+              <div class="ledger-row"><dt>Worst drift</dt><dd><output id="ro-deviation">0</output></dd></div>
+              <div class="ledger-row"><dt>Editable nodes</dt><dd><output id="ro-nodes">0</output></dd></div>
+              <div class="ledger-row"><dt>Path length</dt><dd><output id="ro-length">0</output></dd></div>
+              <div class="ledger-row"><dt>Bounding box</dt><dd><output id="ro-bbox">0</output></dd></div>
+              <div class="ledger-row"><dt>Peak curvature</dt><dd><output id="ro-kmax">0</output></dd></div>
+            </dl>
+            <div class="pathbox">
+              <label for="vec-d">Simplified path data</label>
+              <textarea id="vec-d" data-js="vec-d" readonly rows="4" spellcheck="false"></textarea>
+              <div class="btn-row">
+                <button type="button" class="btn btn-ink" id="vec-copy">
+                  <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><rect x="8" y="8" width="11" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M5 15V6.5A1.5 1.5 0 0 1 6.5 5H15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+                  <span>Copy path</span>
+                </button>
+                <button type="button" class="btn btn-ink" id="vec-download">
+                  <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><path d="M12 4v11M7 11l5 5 5-5M5 20h14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  <span>Download SVG</span>
+                </button>
+                <button type="button" class="btn btn-quiet" id="vec-reset">Reset layer</button>
+              </div>
+            </div>
           </div>
         </div>
       </div>

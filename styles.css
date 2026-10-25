@@ -194,6 +194,7 @@ main { display: block; }
   letter-spacing: -0.04em;
 }
 
+.hero h1 .sentence { display: block; }
 .hero h1 .word { display: inline-block; }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -448,6 +449,33 @@ textarea {
 .check { display: inline-flex; align-items: center; gap: var(--space-2); min-height: 44px; font-size: var(--text-sm); cursor: pointer; }
 .check input { width: 1.15rem; height: 1.15rem; margin: 0; accent-color: var(--vermilion-ink); }
 
+/* ----------------------- vector workspace and live mirror ---------------- */
+
+.vector-workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+  gap: var(--space-6) var(--space-7);
+  align-items: start;
+}
+.vector-panels { display: grid; gap: var(--space-6); min-width: 0; }
+.plate-mirror {
+  position: sticky;
+  top: var(--space-4);
+  z-index: 2;
+  margin: 0;
+  min-width: 0;
+}
+.plate-svg-mirror { pointer-events: none; }
+.plate-mirror .plate-frame { padding: var(--space-3); }
+.plate-mirror .plate-frame::before { inset: var(--space-1); }
+.plate-mirror .plate-caption { align-items: center; }
+.plate-jump {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-weight: 600;
+}
+
 /* ------------------------------ ledger ---------------------------------- */
 
 .ledger-wrap {
@@ -459,6 +487,8 @@ textarea {
 }
 
 .ledger { margin: 0; display: grid; gap: 0; min-width: 0; }
+.vector-panels .ledger-wrap { grid-template-columns: minmax(0, 1fr); margin-top: 0; }
+.vector-panels .ledger { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--space-6); }
 .ledger-row {
   display: flex;
   align-items: baseline;
@@ -574,6 +604,9 @@ textarea {
   align-items: start;
 }
 .atlas-plate { margin: 0; min-width: 0; }
+@media (min-width: 62.01rem) and (min-height: 50rem) {
+  .atlas-plate { position: sticky; top: var(--space-4); }
+}
 .atlas-frame {
   padding: var(--space-3);
   background: var(--tray);
@@ -588,6 +621,8 @@ textarea {
 .at-rect-1 { fill: color-mix(in oklab, var(--viridian) 58%, var(--paper)); }
 .at-rect-2 { fill: color-mix(in oklab, var(--ultramarine) 55%, var(--paper)); }
 .at-rect-3 { fill: color-mix(in oklab, var(--ink) 22%, var(--paper)); }
+.at-rect { transition: filter var(--dur-s) var(--ease-out); }
+.at-rect:hover { filter: saturate(1.35) brightness(0.94); stroke-width: 2px; }
 .at-cell { fill: none; stroke: var(--ink-muted); stroke-width: 1px; stroke-dasharray: 2 2; vector-effect: non-scaling-stroke; opacity: 0.5; }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -642,17 +677,19 @@ textarea {
 
 .vector-shelf {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 10.5rem), 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: var(--space-4);
 }
-.vector-shelf .specimen:first-child { grid-column: span 2; grid-row: span 2; }
-
-.pixel-shelf { display: flex; flex-wrap: wrap; gap: var(--space-4); align-items: flex-end; }
-.pixel-shelf .specimen { flex: 0 1 auto; }
+.pixel-shelf {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-4);
+}
 
 .specimen figure {
   display: grid;
-  gap: var(--space-2);
+  grid-template-rows: auto 1fr;
+  gap: var(--space-3);
   margin: 0;
   height: 100%;
   padding: var(--space-3);
@@ -661,17 +698,14 @@ textarea {
   transition: border-color var(--dur-s) var(--ease-out), transform var(--dur-m) var(--ease-out);
 }
 .specimen figure:hover, .specimen figure:focus-within { border-color: var(--ink); transform: translateY(-2px); }
-.specimen img { width: 100%; height: auto; background: var(--paper); }
-.specimen img.px { image-rendering: pixelated; width: auto; max-width: 100%; min-width: 7rem; }
-.pixel-shelf .specimen img.px { width: 100%; }
-.pixel-shelf .specimen:nth-child(1) { flex-basis: 18rem; }
-.pixel-shelf .specimen:nth-child(2) { flex-basis: 11rem; }
-.pixel-shelf .specimen:nth-child(8) { flex-basis: 22rem; }
-.pixel-shelf .specimen:nth-child(n+3):nth-child(-n+7) { flex-basis: 7.5rem; }
-.specimen figcaption { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-1) var(--space-3); font-size: var(--text-xs); color: var(--ink-muted); }
+.specimen img { display: block; width: 100%; height: auto; aspect-ratio: 1; object-fit: contain; background: var(--paper); }
+.specimen img.px { image-rendering: pixelated; aspect-ratio: 5 / 3; padding: var(--space-2); }
+.specimen figcaption { display: flex; flex-wrap: wrap; align-items: center; align-content: end; gap: var(--space-1) var(--space-3); font-size: var(--text-xs); color: var(--ink-muted); }
 .specimen figcaption strong { color: var(--ink); font-size: var(--text-sm); }
 .specimen figcaption a { font-weight: 600; }
 .open-btn {
+  flex: 1 1 100%;
+  margin-top: var(--space-1);
   min-height: 44px;
   padding: var(--space-1) var(--space-3);
   border: 1.5px solid var(--rule-strong);
@@ -740,7 +774,19 @@ textarea {
     grid-template-columns: minmax(0, 1fr);
   }
   .hero { padding-top: var(--space-6); gap: var(--space-6); }
-  .vector-shelf .specimen:first-child { grid-column: span 2; grid-row: span 1; }
+  .vector-shelf { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .pixel-shelf { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  /* the live mirror becomes a slim sticky strip so the sliders and the picture stay in view together */
+  .vector-workspace { display: block; }
+  .vector-panels { margin-top: var(--space-4); }
+  .plate-mirror {
+    top: 0;
+    padding: var(--space-2) 0;
+    background: var(--paper);
+    border-bottom: var(--rule-w) solid var(--rule);
+  }
+  .plate-mirror .plate-frame { width: min(100%, 30vh, 16rem); margin-inline: auto; }
+  .plate-mirror .plate-caption { display: none; }
 }
 
 @media (max-width: 36rem) {
@@ -751,9 +797,18 @@ textarea {
   .btn-row .btn, .cta-row .btn { flex: 1 1 auto; }
   .bench, .specimens, .method { padding-block: var(--space-7); }
   .vector-shelf { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .vector-shelf .specimen:first-child { grid-column: span 2; }
-  .pixel-shelf .specimen { flex: 1 1 calc(50% - var(--space-4)) !important; }
-  .pixel-shelf .specimen:nth-child(1), .pixel-shelf .specimen:nth-child(8) { flex-basis: 100% !important; }
+  .site-nav { flex-wrap: nowrap; gap: 0 var(--space-3); overflow-x: auto; max-width: 100%; scrollbar-width: none; }
+  .site-nav::-webkit-scrollbar { display: none; }
+  .site-nav a { font-size: var(--text-xs); }
+  .vector-panels .ledger { grid-template-columns: minmax(0, 1fr); }
+  .specimen figure { padding: var(--space-2); gap: var(--space-2); }
+  .specimen figcaption strong { font-size: var(--text-xs); }
+}
+
+/* bigger grab targets for the nodes and handles on touch screens and narrow plates */
+@media (pointer: coarse), (max-width: 36rem) {
+  .node-g .hit { r: 6px; }
+  .handle-g .hit { r: 6.5px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
