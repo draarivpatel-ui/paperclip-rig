@@ -194,7 +194,7 @@ main { display: block; }
   letter-spacing: -0.04em;
 }
 
-.hero h1 .sentence { display: block; }
+.hero h1 .sentence { display: block; word-spacing: 0.1em; }
 .hero h1 .word { display: inline-block; }
 
 @media (prefers-reduced-motion: no-preference) {
