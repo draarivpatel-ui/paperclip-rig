@@ -1124,6 +1124,19 @@ test('animationFrameIndex steps at the frame rate and wraps', () => {
   assert.equal(E.animationFrameIndex(500, 6, 0), 0);
 });
 
+test('animationFrameIndex never returns a negative index when the clock runs slightly behind', () => {
+  // requestAnimationFrame passes the frame start time, which can be earlier than
+  // the performance.now() stored when play was pressed. The live page crashed on
+  // px.frames[-1] before this was clamped.
+  assert.equal(E.animationFrameIndex(-4, 6, 4), 0);
+  assert.equal(E.animationFrameIndex(-1000, 6, 4), 0);
+  assert.equal(E.animationFrameIndex(NaN, 6, 4), 0);
+  for (let ms = -500; ms <= 3000; ms += 7) {
+    const i = E.animationFrameIndex(ms, 6, 4);
+    assert.ok(i >= 0 && i < 4, 'index ' + i + ' at ' + ms + ' ms');
+  }
+});
+
 test('gridToRgba scales pixels and skips transparent or unknown tones', () => {
   const g = E.gridFromRows(['0.', '5x'], { 0: 0, 5: 5 });
   const img = E.gridToRgba(g, ['#ff8000'], 2);

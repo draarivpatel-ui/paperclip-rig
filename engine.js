@@ -1515,7 +1515,11 @@
 
   function animationFrameIndex(elapsedMs, fps, frameCount) {
     if (frameCount < 1) { return 0; }
-    return Math.floor((elapsedMs / 1000) * fps) % frameCount;
+    /* A requestAnimationFrame timestamp marks the start of the frame, so it can
+       be a few milliseconds earlier than the performance.now() taken when play
+       began. A negative elapsed time would give index -1 and an undefined frame. */
+    var ms = elapsedMs > 0 ? elapsedMs : 0;
+    return Math.floor((ms / 1000) * fps) % frameCount;
   }
 
   /** Expand an indexed grid to RGBA bytes at an integer scale. */
