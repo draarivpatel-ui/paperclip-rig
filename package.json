@@ -1,0 +1,17 @@
+{
+  "name": "paperclip-rig",
+  "version": "1.0.0",
+  "description": "Vector path optimiser, MaxRects sprite atlas packer and indexed palette pixel rig, with 18 sample assets.",
+  "license": "MIT",
+  "private": true,
+  "type": "commonjs",
+  "main": "engine.js",
+  "scripts": {
+    "test": "node --test \"tests/*.test.js\"",
+    "assets": "node scripts/export-assets.js",
+    "serve": "python3 -m http.server 8765"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

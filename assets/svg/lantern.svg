@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="240" height="240" role="img" aria-label="Lantern">
+  <title>Lantern</title>
+  <desc>A glass lantern with an ink frame, a paper flame and a carry handle.</desc>
+  <path id="glass-shadow" d="M41 44L85 44C85 44 92.55 69.06 93 82 93.24 88.96 87 102 87 102L39 102C39 102 32.76 88.96 33 82 33.45 69.06 41 44 41 44Z" fill="#161615" opacity="0.14"/>
+  <path id="glass" d="M38 40L82 40C82 40 89.55 65.06 90 78 90.24 84.96 84 98 84 98L36 98C36 98 29.76 84.96 30 78 30.45 65.06 38 40 38 40Z" fill="#C84B31" stroke="#161615" stroke-width="1.6" stroke-linejoin="round"/>
+  <path id="flame" d="M60 52C60 52 66.87 60.74 68 66 68.99 70.61 67.75 75.62 66 80 64.95 82.63 60 86 60 86 60 86 55.05 82.63 54 80 52.25 75.62 51.01 70.61 52 66 53.13 60.74 60 52 60 52Z" fill="#F8F5EE"/>
+  <path id="bar-left" d="M48 40L46 98" fill="none" stroke="#161615" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path id="bar-right" d="M72 40L74 98" fill="none" stroke="#161615" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path id="base" d="M32 98L88 98 84 108 36 108Z" fill="#161615"/>
+  <path id="cap" d="M34 40L86 40 78 30 42 30Z" fill="#161615"/>
+  <path id="handle" d="M44 30C49.33 23.33 51.46 10 60 10 68.54 10 70.67 23.33 76 30" fill="none" stroke="#161615" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="240" height="240" role="img" aria-label="Scallop shell">
+  <title>Scallop shell</title>
+  <desc>A fan shell with seven scalloped lobes and pale ribs.</desc>
+  <path id="shell-shadow" d="M63 108L2.95 86.58 15.95 79.86 12.84 65.56 27.4 64.09 29.78 49.65 43.86 53.65 51.38 41.1 63 50 74.62 41.1 82.14 53.65 96.22 49.65 98.6 64.09 113.16 65.56 110.05 79.86 123.05 86.58Z" fill="#161615" opacity="0.14"/>
+  <path id="shell" d="M60 104L-.05 82.58 12.95 75.86 9.84 61.56 24.4 60.09 26.78 45.65 40.86 49.65 48.38 37.1 60 46 71.62 37.1 79.14 49.65 93.22 45.65 95.6 60.09 110.16 61.56 107.05 75.86 120.05 82.58Z" fill="#C84B31" stroke="#161615" stroke-width="1.6" stroke-linejoin="round"/>
+  <path id="rib-0" d="M60 100L11.14 75.01" fill="none" stroke="#F8F5EE" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" opacity="0.7"/>
+  <path id="rib-1" d="M60 100L23.03 58.64" fill="none" stroke="#F8F5EE" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" opacity="0.7"/>
+  <path id="rib-2" d="M60 100L40.12 47.79" fill="none" stroke="#F8F5EE" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" opacity="0.7"/>
+  <path id="rib-3" d="M60 100L60 44" fill="none" stroke="#F8F5EE" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" opacity="0.7"/>
+  <path id="rib-4" d="M60 100L79.88 47.79" fill="none" stroke="#F8F5EE" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" opacity="0.7"/>
+  <path id="rib-5" d="M60 100L96.97 58.64" fill="none" stroke="#F8F5EE" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" opacity="0.7"/>
+  <path id="rib-6" d="M60 100L108.86 75.01" fill="none" stroke="#F8F5EE" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" opacity="0.7"/>
+</svg>

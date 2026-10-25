@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="240" height="240" role="img" aria-label="Ginkgo leaf">
+  <title>Ginkgo leaf</title>
+  <desc>A fan shaped leaf with a notch, a stem and three ink veins.</desc>
+  <path id="blade-shadow" d="M63 110C63 110 49.44 91.49 43 82 36.77 72.82 27.1 64.9 25 54 23.41 45.72 27.48 36.37 33 30 37.14 25.22 51 24 51 24L63 38 75 24C75 24 88.86 25.22 93 30 98.52 36.37 102.59 45.72 101 54 98.9 64.9 89.23 72.82 83 82 76.56 91.49 63 110 63 110Z" fill="#161615" opacity="0.14"/>
+  <path id="blade" d="M60 106C60 106 46.44 87.49 40 78 33.77 68.82 24.1 60.9 22 50 20.41 41.72 24.48 32.37 30 26 34.14 21.22 48 20 48 20L60 34 72 20C72 20 85.86 21.22 90 26 95.52 32.37 99.59 41.72 98 50 95.9 60.9 86.23 68.82 80 78 73.56 87.49 60 106 60 106Z" fill="#24594C" stroke="#161615" stroke-width="1.6" stroke-linejoin="round"/>
+  <path id="vein-mid" d="M60 102C60 88 60 74 60 60 60 52.67 60 45.33 60 38" fill="none" stroke="#161615" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" opacity="0.8"/>
+  <path id="vein-left" d="M60 102C54.67 90 49.26 78.03 44 66 39.93 56.7 36 47.33 32 38" fill="none" stroke="#161615" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" opacity="0.8"/>
+  <path id="vein-right" d="M60 102C65.33 90 70.43 77.89 76 66 80.43 56.55 85.33 47.33 90 38" fill="none" stroke="#161615" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" opacity="0.8"/>
+  <path id="stem" d="M60 106L60 116" fill="none" stroke="#161615" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

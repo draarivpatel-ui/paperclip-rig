@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="240" height="240" role="img" aria-label="Compass rose">
+  <title>Compass rose</title>
+  <desc>An eight point ultramarine star inside a thin ring with a vermilion north needle.</desc>
+  <path id="ring" d="M117 60C117 71.74 113.01 84 106.11 93.5 99.21 103 88.78 110.58 77.61 114.21 66.44 117.84 53.56 117.84 42.39 114.21 31.22 110.58 20.79 103 13.89 93.5 6.99 84 3 71.74 3 60 3 48.26 6.99 36 13.89 26.5 20.79 17 31.22 9.42 42.39 5.79 53.56 2.16 66.44 2.16 77.61 5.79 88.78 9.42 99.21 17 106.11 26.5 113.01 36 117 48.26 117 60Z" fill="none" stroke="#161615" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <path id="star" d="M60 8L64.59 48.91 84.04 35.96 71.09 55.41 112 60 71.09 64.59 84.04 84.04 64.59 71.09 60 112 55.41 71.09 35.96 84.04 48.91 64.59 8 60 48.91 55.41 35.96 35.96 55.41 48.91Z" fill="#2B4C7E" stroke="#161615" stroke-width="1.6" stroke-linejoin="round"/>
+  <path id="needle" d="M60 8L67 58 53 58Z" fill="#C84B31"/>
+  <path id="hub" d="M65 60C65 61.67 63.94 63.5 62.5 64.33 61.06 65.16 58.94 65.16 57.5 64.33 56.06 63.5 55 61.67 55 60 55 58.33 56.06 56.5 57.5 55.67 58.94 54.84 61.06 54.84 62.5 55.67 63.94 56.5 65 58.33 65 60Z" fill="#F8F5EE" stroke="#161615" stroke-width="1.6" stroke-linejoin="round"/>
+</svg>

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="240" height="240" role="img" aria-label="Quill feather">
+  <title>Quill feather</title>
+  <desc>An ultramarine feather vane on an ink quill with pale barbs.</desc>
+  <path id="vane-shadow" d="M33 110C33 110 28.35 91.41 29 82 29.71 71.68 31.97 61.05 37 52 42.27 42.51 50.08 34.18 59 28 67.86 21.87 89 16 89 16 89 16 88.64 34.79 87 44 85.29 53.56 83.48 63.39 79 72 74.63 80.41 68.08 87.71 61 94 55.87 98.56 48.96 100.59 43 104 39.62 105.93 33 110 33 110Z" fill="#161615" opacity="0.14"/>
+  <path id="vane" d="M30 106C30 106 25.35 87.41 26 78 26.71 67.68 28.97 57.05 34 48 39.27 38.51 47.08 30.18 56 24 64.86 17.87 86 12 86 12 86 12 85.64 30.79 84 40 82.29 49.56 80.48 59.39 76 68 71.63 76.41 65.08 83.71 58 90 52.87 94.56 45.96 96.59 40 100 36.62 101.93 30 106 30 106Z" fill="#2B4C7E" stroke="#161615" stroke-width="1.6" stroke-linejoin="round"/>
+  <path id="quill" d="M28 112C34 100 39.46 87.71 46 76 52.14 65.02 59.33 54.67 66 44 72.67 33.33 79.33 22.67 86 12" fill="none" stroke="#161615" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path id="barb-a" d="M44 78L34 58" fill="none" stroke="#F8F5EE" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" opacity="0.6"/>
+  <path id="barb-b" d="M56 60L48 40" fill="none" stroke="#F8F5EE" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" opacity="0.6"/>
+  <path id="barb-c" d="M68 44L66 24" fill="none" stroke="#F8F5EE" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" opacity="0.6"/>
+</svg>

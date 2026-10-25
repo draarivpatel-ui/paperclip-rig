@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="240" height="240" role="img" aria-label="Skeleton key">
+  <title>Skeleton key</title>
+  <desc>An ultramarine key with a round bow and two teeth.</desc>
+  <path id="shaft-shadow" d="M59 60L103 104" fill="none" stroke="#161615" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" opacity="0.14"/>
+  <path id="shaft" d="M56 56L100 100" fill="none" stroke="#2B4C7E" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <path id="tooth-a" d="M84 84L96 72" fill="none" stroke="#2B4C7E" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <path id="tooth-b" d="M94 94L106 82" fill="none" stroke="#2B4C7E" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <path id="bow" d="M64 40C64 44.94 62.33 50.11 59.42 54.11 56.51 58.11 52.12 61.3 47.42 62.83 42.72 64.36 37.28 64.36 32.58 62.83 27.88 61.3 23.49 58.11 20.58 54.11 17.67 50.11 16 44.94 16 40 16 35.06 17.67 29.89 20.58 25.89 23.49 21.89 27.88 18.7 32.58 17.17 37.28 15.64 42.72 15.64 47.42 17.17 52.12 18.7 56.51 21.89 59.42 25.89 62.33 29.89 64 35.06 64 40Z" fill="#2B4C7E" stroke="#161615" stroke-width="1.6" stroke-linejoin="round"/>
+  <path id="hole" d="M51 40C51 42.81 49.76 45.8 47.78 47.78 45.8 49.76 42.81 51 40 51 37.19 51 34.2 49.76 32.22 47.78 30.24 45.8 29 42.81 29 40 29 37.19 30.24 34.2 32.22 32.22 34.2 30.24 37.19 29 40 29 42.81 29 45.8 30.24 47.78 32.22 49.76 34.2 51 37.19 51 40Z" fill="#EFEAE0" stroke="#161615" stroke-width="1.6" stroke-linejoin="round"/>
+</svg>

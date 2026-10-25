@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="240" height="240" role="img" aria-label="Acorn">
+  <title>Acorn</title>
+  <desc>An acorn with a dark cap, a vermilion nut and a short stalk.</desc>
+  <path id="nut-shadow" d="M63 108C63 108 51 101.33 47 96 42.69 90.26 40.18 83.08 39 76 38.12 70.7 41 60 41 60 41 60 55.4 54 63 54 70.6 54 85 60 85 60 85 60 87.88 70.7 87 76 85.82 83.08 83.31 90.26 79 96 75 101.33 63 108 63 108Z" fill="#161615" opacity="0.14"/>
+  <path id="nut" d="M60 104C60 104 48 97.33 44 92 39.69 86.26 37.18 79.08 36 72 35.12 66.7 38 56 38 56 38 56 52.4 50 60 50 67.6 50 82 56 82 56 82 56 84.88 66.7 84 72 82.82 79.08 80.31 86.26 76 92 72 97.33 60 104 60 104Z" fill="#C84B31" stroke="#161615" stroke-width="1.6" stroke-linejoin="round"/>
+  <path id="cap" d="M32 54C32 54 31.45 42.73 34 38 36.47 33.42 41.27 30.18 46 28 50.28 26.02 55.29 26 60 26 64.71 26 69.72 26.02 74 28 78.73 30.18 83.53 33.42 86 38 88.55 42.73 88 54 88 54 88 54 78.75 56.98 74 58 69.39 58.99 64.71 60 60 60 55.29 60 50.61 58.99 46 58 41.25 56.98 32 54 32 54Z" fill="#161615"/>
+  <path id="stalk" d="M60 26C60.67 22 59.85 17.44 62 14 63.58 11.47 67.33 11.33 70 10" fill="none" stroke="#161615" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path id="shine" d="M46 64L46 78" fill="none" stroke="#F8F5EE" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" opacity="0.6"/>
+</svg>
