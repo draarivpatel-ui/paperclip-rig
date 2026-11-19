@@ -261,7 +261,6 @@ main { display: block; }
 .btn-quiet:hover { border-color: var(--ink); background: var(--tray); color: var(--ink); }
 
 .btn.is-success { border-color: var(--viridian); color: var(--viridian); background: var(--tray); }
-.btn.is-busy { opacity: 0.6; cursor: progress; }
 .btn.is-error { border-color: var(--vermilion-ink); color: var(--vermilion-ink); }
 
 .btn[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
