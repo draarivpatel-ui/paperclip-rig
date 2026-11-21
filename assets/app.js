@@ -1139,6 +1139,7 @@
         flashButton(byId('at-copy'), 'Copied', 'Copy failed', copyText(out ? out.value : ''), 'Copy descriptor');
       });
       on(byId('at-download-json'), 'click', function () {
+        if (!at.atlas.ok) { announce('at-status', 'Nothing to download, the frames did not fit.'); return; }
         var isCss = at.format === 'css';
         saveFile(isCss ? 'atlas.css' : 'atlas.json', atDescriptor(), isCss ? 'text/css' : 'application/json');
         announce('at-status', 'Descriptor downloaded.');

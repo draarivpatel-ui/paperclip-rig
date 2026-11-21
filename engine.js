@@ -214,6 +214,7 @@
    * a long trace cannot blow the call stack. End points are always kept.
    */
   function simplifyPolylineRdp(points, epsilon) {
+    if (!(epsilon >= 0)) { throw new RangeError('epsilon must be a non-negative number'); }
     var n = points.length;
     if (n < 3) { return points.map(clonePoint); }
     var keep = new Uint8Array(n);
@@ -263,8 +264,22 @@
         far = i;
       }
     }
-    var first = simplifyPolylineRdp(points.slice(0, far + 1), epsilon);
-    var second = simplifyPolylineRdp(points.slice(far).concat([points[0]]), epsilon);
+    var halves = [points.slice(0, far + 1), points.slice(far).concat([points[0]])];
+    var first = simplifyPolylineRdp(halves[0], epsilon);
+    var second = simplifyPolylineRdp(halves[1], epsilon);
+    // A half that collapses to its two endpoints must still contribute its
+    // worst vertex, otherwise the ring degrades to a two-point zero-area path.
+    [first, second].forEach(function (out, h) {
+      if (out.length !== 2) { return; }
+      var pts = halves[h];
+      var worst = -1;
+      var worstD = -1;
+      for (var i = 1; i < pts.length - 1; i += 1) {
+        var d = perpendicularDistance(pts[i], pts[0], pts[pts.length - 1]);
+        if (d > worstD) { worstD = d; worst = i; }
+      }
+      if (worst > 0) { out.splice(1, 0, clonePoint(pts[worst])); }
+    });
     return first.concat(second.slice(1, second.length - 1));
   }
 
@@ -330,6 +345,7 @@
           cx = sx;
           cy = sy;
           lastCtrl = null;
+          cmd = null;
           continue;
         }
       } else if (cmd === null) {
@@ -1162,9 +1178,10 @@
 
   /** CSS sprite rules: one class per frame using background-position. */
   function exportCssSprites(atlas, imageUrl, prefix) {
-    var pre = prefix === undefined ? 'sprite' : prefix;
+    var pre = cssIdent(prefix === undefined ? 'sprite' : prefix);
+    var url = String(imageUrl).replace(/["\\\n\r)]/g, function (c) { return '\\' + c; });
     var lines = [];
-    lines.push('.' + pre + ' { background-image: url("' + imageUrl + '"); background-repeat: no-repeat; image-rendering: pixelated; display: inline-block; }');
+    lines.push('.' + pre + ' { background-image: url("' + url + '"); background-repeat: no-repeat; image-rendering: pixelated; display: inline-block; }');
     atlas.placements.forEach(function (p) {
       lines.push('.' + pre + '-' + cssIdent(p.name) + ' { width: ' + p.w + 'px; height: ' + p.h +
         'px; background-position: -' + p.x + 'px -' + p.y + 'px; }');
@@ -1225,6 +1242,9 @@
 
   /** Integer points of Bresenham's line from (x0, y0) to (x1, y1), both ends included. */
   function bresenhamLine(x0, y0, x1, y1) {
+    if (![x0, y0, x1, y1].every(Number.isInteger)) {
+      throw new RangeError('bresenhamLine needs integer endpoints');
+    }
     var points = [];
     var dx = Math.abs(x1 - x0);
     var dy = Math.abs(y1 - y0);
@@ -1267,8 +1287,12 @@
   /** Filled disc by distance test, deterministic and symmetric. */
   function drawDisc(grid, cx, cy, radius, index) {
     var r2 = radius * radius;
-    for (var j = Math.floor(cy - radius); j <= Math.ceil(cy + radius); j += 1) {
-      for (var i = Math.floor(cx - radius); i <= Math.ceil(cx + radius); i += 1) {
+    var i0 = Math.max(0, Math.floor(cx - radius));
+    var i1 = Math.min(grid.width - 1, Math.ceil(cx + radius));
+    var j0 = Math.max(0, Math.floor(cy - radius));
+    var j1 = Math.min(grid.height - 1, Math.ceil(cy + radius));
+    for (var j = j0; j <= j1; j += 1) {
+      for (var i = i0; i <= i1; i += 1) {
         var dx = i - cx;
         var dy = j - cy;
         if (dx * dx + dy * dy <= r2) { setPixel(grid, i, j, index); }
@@ -1282,21 +1306,27 @@
     if (!inBounds(grid, x, y)) { return 0; }
     var target = getPixel(grid, x, y);
     if (target === newIndex) { return 0; }
-    var queue = [[x, y]];
+    var w = grid.width;
+    var queue = new Int32Array(w * grid.height);
     var head = 0;
+    var tail = 0;
     var filled = 0;
     setPixel(grid, x, y, newIndex);
-    while (head < queue.length) {
+    queue[tail] = y * w + x;
+    tail += 1;
+    while (head < tail) {
       var cell = queue[head];
       head += 1;
       filled += 1;
-      var nbrs = [[cell[0] + 1, cell[1]], [cell[0] - 1, cell[1]], [cell[0], cell[1] + 1], [cell[0], cell[1] - 1]];
+      var cx = cell % w;
+      var cy = (cell - cx) / w;
       for (var k = 0; k < 4; k += 1) {
-        var nx = nbrs[k][0];
-        var ny = nbrs[k][1];
+        var nx = k === 0 ? cx + 1 : k === 1 ? cx - 1 : cx;
+        var ny = k === 2 ? cy + 1 : k === 3 ? cy - 1 : cy;
         if (inBounds(grid, nx, ny) && getPixel(grid, nx, ny) === target) {
           setPixel(grid, nx, ny, newIndex);
-          queue.push([nx, ny]);
+          queue[tail] = ny * w + nx;
+          tail += 1;
         }
       }
     }
@@ -1636,6 +1666,7 @@
    * byte-for-byte reproducible and needs no library in the browser or Node.
    */
   function encodePngRgba(width, height, rgba) {
+    if (!(width > 0) || !(height > 0)) { throw new RangeError('PNG dimensions must be positive'); }
     var stride = width * 4 + 1;
     var raw = new Uint8Array(stride * height);
     for (var y = 0; y < height; y += 1) {

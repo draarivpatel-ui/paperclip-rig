@@ -249,11 +249,17 @@
     return layer.role === 'shadow' ? ROLE_HEX.ink : ROLE_HEX[layer.role];
   }
 
+  function escXml(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
   /** A standalone SVG file for one vector asset, using concrete hex colours. */
   function vectorAssetToSvg(asset) {
     var body = asset.layers.map(function (l) {
       var op = l.role === 'shadow' ? 0.14 : l.opacity;
-      var attrs = ' d="' + l.d + '"';
+      var attrs = ' d="' + escXml(l.d) + '"';
       if (l.kind === 'stroke') {
         attrs += ' fill="none" stroke="' + hexFor(l) + '" stroke-width="' + l.width + '" stroke-linecap="round" stroke-linejoin="round"';
       } else {
@@ -261,11 +267,11 @@
         if (l.outline) { attrs += ' stroke="' + ROLE_HEX.ink + '" stroke-width="1.6" stroke-linejoin="round"'; }
       }
       if (op !== undefined) { attrs += ' opacity="' + op + '"'; }
-      return '  <path id="' + l.id + '"' + attrs + '/>';
+      return '  <path id="' + escXml(l.id) + '"' + attrs + '/>';
     }).join('\n');
     return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + asset.viewBox + ' ' + asset.viewBox +
-      '" width="240" height="240" role="img" aria-label="' + asset.name + '">\n  <title>' + asset.name +
-      '</title>\n  <desc>' + asset.description + '</desc>\n' + body + '\n</svg>\n';
+      '" width="240" height="240" role="img" aria-label="' + escXml(asset.name) + '">\n  <title>' + escXml(asset.name) +
+      '</title>\n  <desc>' + escXml(asset.description) + '</desc>\n' + body + '\n</svg>\n';
   }
 
   /* ------------------------------- pixel -------------------------------- */

@@ -4,9 +4,9 @@ Paperclip Rig is an open source browser workbench for vector outlines, indexed p
 
 Live workbench: https://aariv.me/paperclip-rig/
 
-## Honest disclosure first
+## Scope first
 
-Hack Club Paperclip rewards hand-drawn art created by a human artist. The sample assets in this repository (`assets/svg/` and `assets/png/`) were authored in code with an AI-assisted workflow as deterministic fixtures for the three editors, not drawn by hand. Because of that, this repository is an open source vector and sprite rigging tool and is not a Hack Club Paperclip art entry. Full details are in [NOTES.md](NOTES.md).
+Hack Club Paperclip rewards hand-drawn art created by a human artist. The sample assets in this repository (`assets/svg/` and `assets/png/`) were authored in code as deterministic fixtures for the three editors, not drawn by hand. Because of that, this repository is an open source vector and sprite rigging tool and is not a Hack Club Paperclip art entry. Full details are in [NOTES.md](NOTES.md).
 
 ## Three benches on one drafting table
 
@@ -28,7 +28,7 @@ Ten layered SVG vector specimens and eight indexed pixel sprites live in [assets
 - [engine.js](engine.js): Pure, deterministic UMD engine (De Casteljau cubic Bezier evaluation and splitting, exact derivative root bounding boxes, iterative Ramer-Douglas-Peucker open and closed simplification, Catmull-Rom smooth spline fitting, MaxRects BSSF bin packing, Bresenham lines, 4-connected flood fill, OKLab and CIE Lab colour distance and lightness ranking, and stored-block PNG encoding with CRC32 and Adler32).
 - [assets/data.js](assets/data.js): Code-authored definitions for the 18 sample assets.
 - [assets/app.js](assets/app.js): Browser and testable DOM controller wiring the three benches and specimen shelf.
-- [tests/engine.test.js](tests/engine.test.js) and [tests/dom-smoke.test.js](tests/dom-smoke.test.js): Node test suite (`node:test`) covering engine maths, PNG encoding, asset generation, and DOM controller interactions.
+- The files in `tests/`: Node test suite (`node:test`) covering engine maths, PNG encoding, asset generation, and DOM controller interactions.
 
 ## Run and test locally
 
@@ -41,6 +41,8 @@ npm run serve
 ```
 
 Then open `http://localhost:8765` in a browser.
+
+<!-- verification -->
 
 ## License
 

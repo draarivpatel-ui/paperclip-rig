@@ -45,10 +45,6 @@ html {
   scroll-padding-top: var(--space-5);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  html { scroll-behavior: smooth; }
-}
-
 body {
   margin: 0;
   overflow-x: clip;
@@ -213,9 +209,6 @@ main { display: block; }
   from { opacity: 0; transform: translateY(0.35em); }
   to { opacity: 1; transform: translateY(0); }
 }
-
-.lede { max-width: 44ch; font-size: var(--text-lg); line-height: 1.45; }
-.hero-note { max-width: 46ch; color: var(--ink-muted); font-size: var(--text-sm); }
 
 .cta-row { display: flex; flex-wrap: wrap; gap: var(--space-3); }
 
