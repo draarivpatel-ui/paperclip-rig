@@ -20,7 +20,7 @@ Because of that:
 
 Run `npm test`. The full suite includes engine, mounted controller and self-scanning content tests. DEVPOST_UPGRADE.md records the verified suite result at the time of each change.
 
-Coverage includes cubic evaluation, derivative-root bounds, open and closed contour simplification, smooth refitting, atlas packing and overlap checks, descriptor output, raster drawing, palette math, stored-block PNG encoding and static asset equivalence. The existing three benches remain the implementation; no new algorithm is claimed for this repair.
+Coverage includes cubic evaluation, derivative-root bounds, open and closed contour simplification, smooth refitting, atlas packing and overlap checks, descriptor output, raster drawing, palette math, stored-block PNG encoding and static asset equivalence. The audit lab adds [rig-lab.js](rig-lab.js), a dependency-free module with a pure-JS SHA-256 (verified against Node `crypto` at every length from 0 to 160 bytes plus the FIPS known-answer vectors), a cycle-safe canonical JSON serializer, the RDP Pareto sweep, the atlas configuration sweep, the palette audit, the proof-brief exporters, the `#prlab=` state codec, and a 26-check self-test battery. [scripts/audit-headless.mjs](scripts/audit-headless.mjs) audits the live page in real headless Chromium over raw CDP at 1440x900 and 390x844 with zero console errors, zero page exceptions, zero external requests and zero horizontal overflow, including a real `Page.reload` hash-state restoration.
 
 ## What was not verified
 

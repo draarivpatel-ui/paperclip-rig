@@ -14,6 +14,17 @@ Hack Club Paperclip rewards hand-drawn art created by a human artist. The sample
 2. **Pixel bench (`#pixel`)**: Paint `16x16` and `32x32` multi-frame sprites using a five-tone indexed model. Switching palettes (`Archival ink`, `Botanical plate`, `Risograph trio`, `Game Boy DMG`, `Pico-8`, `Blueprint`) ranks target colours by OKLab perceptual lightness (`L`) so the darkest tone always maps to the darkest colour. Includes Bresenham line drawing, 4-connected flood fill, onion skinning, variable frame rate preview, and dependency-free PNG and SVG sprite sheet export.
 3. **Atlas press (`#atlas`)**: Pack all sprite frames or a seeded UI kit into power-of-two or custom sheets using the MaxRects Best Short Side Fit heuristic with configurable padding and edge pixel extrusion. Validates every placement for bounds and overlaps, and exports descriptors in TexturePacker JSON (Hash or Array), Phaser 3 multiatlas JSON, Godot region JSON, or CSS sprite rules alongside a packed PNG sheet.
 
+## Audit and benchmark lab (`#lab`)
+
+A fourth section re-runs the same engine against the same fixtures and shows the measurements:
+
+- **Vector Pareto frontier**: eleven log-spaced RDP tolerances (`0.05` to `6.00`) for any specimen, plotted as reduction versus measured trace drift, with the Pareto knee highlighted and a jump into the vector bench.
+- **Atlas efficiency sweep**: twelve padding/extrusion configurations, each a real verified pack, on the real sprite frames or the seeded UI kit.
+- **Palette matrix**: all six palettes compared on OKLab lightness monotonicity, minimum adjacent and pairwise Delta-E, and indexed contrast range; every row previews and applies to the pixel bench.
+- **Proof brief**: one canonical-JSON SHA-256 digest (pure JS, FIPS 180-4) stamps the badge and the JSON, formula-safe CSV, and Markdown exports; verify and one-unit tamper demo buttons prove tamper detection.
+- **Shareable state**: `#prlab=` encodes the full lab state into the URL with a fail-closed codec; hostile or malformed payloads restore defaults.
+- **In-page checks**: a 26-check self-test battery runs live against the engine and lab modules.
+
 ## Eighteen sample assets
 
 Ten layered SVG vector specimens and eight indexed pixel sprites live in [assets/data.js](assets/data.js) and are exported to static files by [scripts/export-assets.js](scripts/export-assets.js):
@@ -26,9 +37,12 @@ Ten layered SVG vector specimens and eight indexed pixel sprites live in [assets
 - [index.html](index.html): Single-page workbench markup with keyboard and pointer accessibility.
 - [tokens.css](tokens.css) and [styles.css](styles.css): Archival drafting-table styling using custom properties and self-hosted Fraunces, Hanken Grotesk, and JetBrains Mono fonts (`fonts/`).
 - [engine.js](engine.js): Pure, deterministic UMD engine (De Casteljau cubic Bezier evaluation and splitting, exact derivative root bounding boxes, iterative Ramer-Douglas-Peucker open and closed simplification, Catmull-Rom smooth spline fitting, MaxRects BSSF bin packing, Bresenham lines, 4-connected flood fill, OKLab and CIE Lab colour distance and lightness ranking, and stored-block PNG encoding with CRC32 and Adler32).
+- [rig-lab.js](rig-lab.js): Dependency-free lab module (pure-JS SHA-256, cycle-safe canonical JSON, the Pareto and atlas sweeps, palette audit, proof exporters, the `#prlab=` codec, and the self-check battery).
 - [assets/data.js](assets/data.js): Code-authored definitions for the 18 sample assets.
 - [assets/app.js](assets/app.js): Browser and testable DOM controller wiring the three benches and specimen shelf.
-- The files in `tests/`: Node test suite (`node:test`) covering engine maths, PNG encoding, asset generation, and DOM controller interactions.
+- [assets/lab-app.js](assets/lab-app.js): Controller wiring the lab charts, comparator table, proof brief, and hash codec.
+- The files in `tests/`: Node test suite (`node:test`) covering engine maths, PNG encoding, asset generation, lab correctness and hostile-input handling, and DOM controller interactions.
+- [scripts/audit-headless.mjs](scripts/audit-headless.mjs): Zero-dependency headless Chromium audit driving the page over raw CDP at two viewports.
 
 ## Run and test locally
 

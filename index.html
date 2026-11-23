@@ -34,6 +34,7 @@
       <a href="#vector">Vector bench</a>
       <a href="#pixel">Pixel bench</a>
       <a href="#atlas">Atlas press</a>
+      <a href="#lab">Audit lab</a>
       <a href="#specimens">Samples</a>
       <a href="#method">Method</a>
     </nav>
@@ -365,6 +366,125 @@
       <p id="at-status" class="sr-only" role="status" aria-live="polite"></p>
     </section>
 
+    <section class="bench lab-bench" id="lab" aria-labelledby="lab-title">
+      <div class="bench-head">
+        <h2 id="lab-title">Audit and benchmark lab</h2>
+      </div>
+
+      <div class="lab-pair">
+        <figure class="lab-chart">
+          <div class="lab-chart-frame">
+            <svg id="lab-pareto-svg" data-js="lab-pareto-svg" viewBox="0 0 340 220" role="group" aria-label="Pareto frontier of tolerance versus drift. Each marker is a real optimise run."></svg>
+          </div>
+          <figcaption class="plate-caption">
+            <span id="lab-pareto-cap">Tolerance sweep</span>
+            <span class="plate-hint">X is measured trace drift, Y is points removed. Vermilion marks the Pareto knee.</span>
+          </figcaption>
+        </figure>
+        <div class="lab-panel">
+          <div class="controls stacked" role="group" aria-label="Pareto sweep controls">
+            <div class="field">
+              <label for="lab-spec">Specimen</label>
+              <select id="lab-spec" data-js="lab-spec"></select>
+            </div>
+            <dl class="ledger tight" aria-label="Selected sweep point">
+              <div class="ledger-row"><dt>Tolerance</dt><dd><output id="lab-ro-eps">-</output></dd></div>
+              <div class="ledger-row"><dt>Points kept</dt><dd><output id="lab-ro-kept">-</output></dd></div>
+              <div class="ledger-row"><dt>Reduction</dt><dd><output id="lab-ro-red">-</output></dd></div>
+              <div class="ledger-row"><dt>Trace drift</dt><dd><output id="lab-ro-drift">-</output></dd></div>
+              <div class="ledger-row"><dt>Pareto knee</dt><dd><output id="lab-ro-knee">-</output></dd></div>
+            </dl>
+            <button type="button" class="btn btn-ink" id="lab-load-vector">
+              <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <span>Load in Vector Bench</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="lab-pair">
+        <figure class="lab-chart">
+          <div class="lab-chart-frame">
+            <svg id="lab-atlas-svg" data-js="lab-atlas-svg" viewBox="0 0 340 220" role="group" aria-label="Packing efficiency across padding and extrusion configurations."></svg>
+          </div>
+          <figcaption class="plate-caption">
+            <span id="lab-atlas-cap">Packing sweep</span>
+            <span class="plate-hint">Each bar is a real MaxRects pack, verified for overlaps.</span>
+          </figcaption>
+        </figure>
+        <div class="lab-panel">
+          <div class="controls stacked" role="group" aria-label="Atlas sweep controls">
+            <div class="field">
+              <label for="lab-src">Frames</label>
+              <select id="lab-src" data-js="lab-src">
+                <option value="pixels">Real sprite frames</option>
+                <option value="kit">Seeded UI kit</option>
+              </select>
+            </div>
+            <div class="field checks">
+              <label class="check"><input id="lab-pot" data-js="lab-pot" type="checkbox" checked><span>Power of two sheet</span></label>
+            </div>
+            <dl class="ledger tight" aria-label="Selected packing configuration">
+              <div class="ledger-row"><dt>Configuration</dt><dd><output id="lab-at-cfg">-</output></dd></div>
+              <div class="ledger-row"><dt>Sheet size</dt><dd><output id="lab-at-size">-</output></dd></div>
+              <div class="ledger-row"><dt>Frames packed</dt><dd><output id="lab-at-frames">-</output></dd></div>
+              <div class="ledger-row"><dt>Efficiency</dt><dd><output id="lab-at-eff">-</output></dd></div>
+              <div class="ledger-row"><dt>Wasted pixels</dt><dd><output id="lab-at-waste">-</output></dd></div>
+              <div class="ledger-row"><dt>Overlap check</dt><dd><output id="lab-at-valid">-</output></dd></div>
+            </dl>
+          </div>
+        </div>
+      </div>
+
+      <div class="lab-panel lab-wide">
+        <h3 class="lab-subtitle">Palette lightness and contrast matrix</h3>
+        <div class="lab-table-wrap">
+          <table class="lab-table" id="lab-palette-table">
+            <thead>
+              <tr>
+                <th scope="col">Palette</th>
+                <th scope="col">Tones</th>
+                <th scope="col">Lightness</th>
+                <th scope="col">Min adjacent dE</th>
+                <th scope="col">Min pair dE</th>
+                <th scope="col">Contrast</th>
+              </tr>
+            </thead>
+            <tbody id="lab-palette-rows" data-js="lab-palette-rows"></tbody>
+          </table>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn btn-quiet" id="lab-apply-palette">Use in pixel bench</button>
+        </div>
+      </div>
+
+      <div class="lab-panel lab-wide lab-proof">
+        <h3 class="lab-subtitle">Audited proof brief</h3>
+        <div class="lab-digest-row">
+          <code class="lab-digest" id="lab-digest" data-js="lab-digest" title="SHA-256 over the canonical JSON brief">pending</code>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn btn-ink" id="lab-verify">Verify digest</button>
+          <button type="button" class="btn btn-quiet" id="lab-tamper">1-unit tamper demo</button>
+          <button type="button" class="btn btn-ink" id="lab-dl-json">JSON</button>
+          <button type="button" class="btn btn-ink" id="lab-dl-csv">CSV</button>
+          <button type="button" class="btn btn-ink" id="lab-dl-md">Markdown</button>
+        </div>
+        <p class="lab-verify-out" id="lab-verify-out" role="status"></p>
+        <textarea id="lab-brief" data-js="lab-brief" readonly rows="8" spellcheck="false" aria-label="Audit brief JSON preview"></textarea>
+      </div>
+
+      <div class="lab-panel lab-wide lab-selftest">
+        <h3 class="lab-subtitle">In-page deterministic checks</h3>
+        <div class="btn-row">
+          <button type="button" class="btn btn-ink" id="lab-run-tests">Run the checks</button>
+        </div>
+        <p class="lab-verify-out" id="lab-test-summary" role="status"></p>
+        <ol class="selftest-list" id="lab-test-list"></ol>
+      </div>
+      <p id="lab-status" class="sr-only" role="status" aria-live="polite"></p>
+    </section>
+
     <section class="specimens" id="specimens" aria-labelledby="specimens-title">
       <div class="bench-head">
         <h2 id="specimens-title">Eighteen sample assets</h2>
@@ -418,12 +538,14 @@
 
   <footer class="colophon">
     <p>Paperclip Rig is MIT licensed. Set in Fraunces, Hanken Grotesk and JetBrains Mono, all under the SIL Open Font License.</p>
-    <p><a href="https://github.com/draarivpatel-ui/paperclip-rig">Source on GitHub</a> <span class="sep" aria-hidden="true"></span> <a href="engine.js">engine.js</a> <span class="sep" aria-hidden="true"></span> <a href="https://github.com/draarivpatel-ui/paperclip-rig/blob/main/NOTES.md">Notes</a></p>
+    <p><a href="https://github.com/draarivpatel-ui/paperclip-rig">Source on GitHub</a> <span class="sep" aria-hidden="true"></span> <a href="engine.js">engine.js</a> <span class="sep" aria-hidden="true"></span> <a href="rig-lab.js">rig-lab.js</a> <span class="sep" aria-hidden="true"></span> <a href="https://github.com/draarivpatel-ui/paperclip-rig/blob/main/NOTES.md">Notes</a></p>
   </footer>
 
   <noscript><p class="noscript">The editors need JavaScript. The sample files above still download and open on their own.</p></noscript>
   <script src="engine.js"></script>
+  <script src="rig-lab.js"></script>
   <script src="assets/data.js"></script>
   <script src="assets/app.js"></script>
+  <script src="assets/lab-app.js"></script>
 </body>
 </html>

@@ -1,6 +1,20 @@
 # PaperclipRig Upgrade Record
 
-## Completed changes
+## Audit and benchmark lab (current change)
+
+- Added `rig-lab.js`, a dependency-free UMD module: pure-JS SHA-256 (FIPS 180-4, verified against Node `crypto` at every length 0-160 plus the KATs), cycle-safe and depth-bounded canonical JSON with prototype-pollution guards, the 11-step RDP Pareto sweep over all ten specimens, the 12-configuration atlas sweep on real sprite frames and the seeded UI kit, the six-palette OKLab audit, digest-stamped JSON/CSV/Markdown proof exports sharing one cached digest, the fail-closed `#prlab=` codec, and a 26-check self-test battery.
+- Added the `#lab` section: an interactive Pareto frontier chart, an atlas efficiency chart, a palette comparator matrix that applies to the pixel bench, a proof brief with verify and one-unit tamper demo, and the in-page check runner.
+- Added `assets/lab-app.js` and lab styling with `minmax(0, 1fr)` grids and `min-width: 0` children so 390px has zero horizontal overflow.
+- Added `scripts/audit-headless.mjs`, a zero-dependency headless Chromium audit over raw CDP.
+
+## Verification (current change)
+
+- `npm test`: 531 tests, all passing, 0 skipped.
+- Honesty harness (`hark_honesty_and_defect_harness.py --audit .`): 0 violations across 17 files.
+- Em/en dash scan over every tracked file: 0 matches.
+- Real headless Chromium CDP audit: 64/64 checks passed at 1440x900 and 390x844 plus a deep-link boot. 0 console errors, 0 page exceptions, 0 external requests, 0 horizontal overflow at both sizes; real pointer clicks on the Pareto markers, atlas bars, palette rows, verify, tamper and self-test controls; `Page.reload` restores `#prlab=` state.
+
+## Completed changes (earlier round)
 
 - Completed the interrupted scope wording while preserving the explicit distinction between code-authored sample fixtures and human-drawn contest art.
 - Verified the existing vector, pixel, palette, PNG and atlas engines and mounted controls. No new algorithm is claimed for this repair.
@@ -20,7 +34,7 @@
 
 ## Verification
 
-Run the full suite with `npm test` (200 tests, all passing at the time of this change).
+Run the full suite with `npm test` (200 tests passing after the earlier round; the suite now stands at 531, all passing).
 
 <!-- verification -->
 
