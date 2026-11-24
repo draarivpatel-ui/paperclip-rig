@@ -272,6 +272,11 @@
   /* ------------------------------------------------------------------ */
 
   function logSpacedEpsilons(lo, hi, n) {
+    if (!(lo > 0) || !(hi > 0) || !isFinite(lo) || !isFinite(hi) || hi < lo) {
+      throw new RangeError('logSpacedEpsilons needs finite positive bounds with hi >= lo');
+    }
+    if (!Number.isInteger(n) || n < 1) { throw new RangeError('logSpacedEpsilons needs a positive integer count'); }
+    if (n === 1) { return [lo]; }
     var out = [];
     for (var i = 0; i < n; i += 1) {
       out.push(lo * Math.pow(hi / lo, i / (n - 1)));
@@ -312,7 +317,7 @@
         epsilon: epsilon,
         tracePoints: trace.length,
         kept: r.nodeCountAfter,
-        reduction: 1 - r.nodeCountAfter / trace.length,
+        reduction: trace.length === 0 ? 0 : 1 - r.nodeCountAfter / trace.length,
         drift: r.deviation,
         bytesBefore: r.bytesBefore,
         bytesAfter: r.bytesAfter
@@ -619,7 +624,7 @@
    */
   function csvCell(v) {
     var s = v === null || v === undefined ? '' : String(v);
-    if (/^[\t\r =+\-@]/.test(s)) { s = "'" + s; }
+    if (/^[\t\r\n =+\-@]/.test(s)) { s = "'" + s; }
     if (/[",\n\r]/.test(s)) { s = '"' + s.replace(/"/g, '""') + '"'; }
     return s;
   }

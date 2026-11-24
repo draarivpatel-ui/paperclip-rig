@@ -286,12 +286,16 @@
   /** Largest distance from the vertices of a to the polyline b. */
   function oneSidedDeviation(a, b, closed) {
     var worst = 0;
-    var segs = closed ? b.length : b.length - 1;
+    var segs = b.length === 1 ? 0 : (closed ? b.length : b.length - 1);
     a.forEach(function (p) {
       var nearest = Infinity;
-      for (var i = 0; i < segs; i += 1) {
-        var d = perpendicularDistance(p, b[i], b[(i + 1) % b.length]);
-        if (d < nearest) { nearest = d; }
+      if (b.length === 1) {
+        nearest = distance(p, b[0]);
+      } else {
+        for (var i = 0; i < segs; i += 1) {
+          var d = perpendicularDistance(p, b[i], b[(i + 1) % b.length]);
+          if (d < nearest) { nearest = d; }
+        }
       }
       if (nearest > worst && nearest !== Infinity) { worst = nearest; }
     });
@@ -308,8 +312,35 @@
   /* SVG path parsing, measuring and serialising                         */
   /* ------------------------------------------------------------------ */
 
-  var TOKEN_RE = /([MmLlHhVvCcSsQqZz])|([-+]?(?:\d+\.?\d*|\.\d+)(?:[eE][-+]?\d+)?)/g;
+  var PATH_COMMANDS = 'MmLlHhVvCcSsQqZz';
+  var PATH_NUMBER_RE = /^[-+]?(?:\d+\.?\d*|\.\d+)(?:[eE][-+]?\d+)?/;
   var ARG_COUNT = { M: 2, L: 2, H: 1, V: 1, C: 6, S: 4, Q: 4, Z: 0 };
+
+  /* Tokenise strictly: whitespace and commas separate tokens, but every other
+     byte must belong to a supported command or a complete number. The old
+     global-regexp lexer skipped junk between tokens, so malformed path data
+     could silently become a different path. */
+  function tokenizeSvgPath(d) {
+    var tokens = [];
+    var i = 0;
+    while (i < d.length) {
+      var ch = d.charAt(i);
+      if (/\s/.test(ch) || ch === ',') {
+        i += 1;
+      } else if (/[A-Za-z]/.test(ch)) {
+        if (/[AaTt]/.test(ch)) { throw new Error('arc and smooth quadratic commands are not supported'); }
+        if (PATH_COMMANDS.indexOf(ch) < 0) { throw new Error('unexpected character ' + ch + ' in path data'); }
+        tokens.push({ cmd: ch });
+        i += 1;
+      } else {
+        var m = PATH_NUMBER_RE.exec(d.slice(i));
+        if (!m) { throw new Error('unexpected character ' + ch + ' in path data'); }
+        tokens.push({ num: parseFloat(m[0]) });
+        i += m[0].length;
+      }
+    }
+    return tokens;
+  }
 
   /**
    * Parse path data into absolute M, L, C and Z commands.
@@ -317,17 +348,7 @@
    */
   function parseSvgPath(d) {
     if (typeof d !== 'string') { throw new TypeError('path data must be a string'); }
-    var tokens = [];
-    var match;
-    TOKEN_RE.lastIndex = 0;
-    while ((match = TOKEN_RE.exec(d)) !== null) {
-      if (match[1] !== undefined) {
-        tokens.push({ cmd: match[1] });
-      } else {
-        tokens.push({ num: parseFloat(match[2]) });
-      }
-    }
-    if (/[AaTt]/.test(d)) { throw new Error('arc and smooth quadratic commands are not supported'); }
+    var tokens = tokenizeSvgPath(d);
     var out = [];
     var cx = 0;
     var cy = 0;
@@ -532,8 +553,15 @@
       } else if (code < 0x800) {
         bytes += 2;
       } else if (code >= 0xd800 && code <= 0xdbff) {
-        bytes += 4;
-        i += 1;
+        var next = i + 1 < str.length ? str.charCodeAt(i + 1) : 0;
+        if (next >= 0xdc00 && next <= 0xdfff) {
+          bytes += 4;
+          i += 1;
+        } else {
+          bytes += 3;
+        }
+      } else if (code >= 0xdc00 && code <= 0xdfff) {
+        bytes += 3;
       } else {
         bytes += 3;
       }
@@ -1003,14 +1031,44 @@
    * sort ('maxside', 'area' or 'none').
    * Returns { ok, width, height, placements, failed, efficiency, ... }.
    */
+  function nonNegativeIntegerOption(value, name) {
+    if (typeof value !== 'number' || !isFinite(value) || Math.floor(value) !== value || value < 0) {
+      throw new RangeError(name + ' must be a non-negative integer');
+    }
+    return value;
+  }
+
+  function validateAtlasInputFrames(frames) {
+    if (!Array.isArray(frames)) { throw new TypeError('frames must be an array'); }
+    var seen = {};
+    frames.forEach(function (f, i) {
+      if (!f || typeof f !== 'object') { throw new TypeError('frame ' + i + ' must be an object'); }
+      if (typeof f.name !== 'string' || f.name === '') { throw new TypeError('frame ' + i + ' needs a non-empty name'); }
+      if (seen[f.name]) { throw new RangeError('frame names must be unique: ' + f.name); }
+      seen[f.name] = true;
+      ['w', 'h'].forEach(function (key) {
+        if (typeof f[key] !== 'number' || !isFinite(f[key]) || Math.floor(f[key]) !== f[key] || f[key] <= 0) {
+          throw new RangeError('frame ' + f.name + ' ' + key + ' must be a positive integer');
+        }
+      });
+    });
+    return frames;
+  }
+
   function packSpriteAtlasMaxRects(frames, options) {
     var opts = options || {};
-    var padding = opts.padding === undefined ? 2 : Math.max(0, Math.floor(opts.padding));
-    var extrude = opts.extrude === undefined ? 1 : Math.max(0, Math.floor(opts.extrude));
+    var padding = opts.padding === undefined ? 2 : nonNegativeIntegerOption(opts.padding, 'padding');
+    var extrude = opts.extrude === undefined ? 1 : nonNegativeIntegerOption(opts.extrude, 'extrude');
     var maxSize = opts.maxSize === undefined ? 2048 : opts.maxSize;
+    if (typeof maxSize !== 'number' || !isFinite(maxSize) || Math.floor(maxSize) !== maxSize || maxSize <= 0) {
+      throw new RangeError('maxSize must be a positive integer');
+    }
     var powerOfTwo = opts.powerOfTwo !== false;
     var sortMode = opts.sort === undefined ? 'maxside' : opts.sort;
-    var clean = frames.filter(function (f) { return f.w > 0 && f.h > 0; });
+    if (sortMode !== 'maxside' && sortMode !== 'area' && sortMode !== 'none') {
+      throw new RangeError('sort must be maxside, area or none');
+    }
+    var clean = validateAtlasInputFrames(frames);
     var sorted = sortFrames(clean, sortMode);
     var frameArea = 0;
     var cellArea = 0;
@@ -1373,8 +1431,10 @@
   /* ------------------------------------------------------------------ */
 
   function hexToRgb(hex) {
-    var h = String(hex).replace('#', '');
+    if (typeof hex !== 'string') { throw new TypeError('hex colour must be a string'); }
+    var h = hex.charAt(0) === '#' ? hex.slice(1) : hex;
     if (h.length === 3) { h = h.charAt(0) + h.charAt(0) + h.charAt(1) + h.charAt(1) + h.charAt(2) + h.charAt(2); }
+    if (!/^[0-9a-fA-F]{6}$/.test(h)) { throw new RangeError('hex colour must have 3 or 6 hexadecimal digits'); }
     var n = parseInt(h, 16);
     return { r: (n >> 16) & 255, g: (n >> 8) & 255, b: n & 255 };
   }
@@ -1544,12 +1604,15 @@
   }
 
   function animationFrameIndex(elapsedMs, fps, frameCount) {
-    if (frameCount < 1) { return 0; }
+    var count = Math.floor(frameCount);
+    if (!isFinite(count) || count < 1 || !(fps > 0) || !isFinite(fps)) { return 0; }
     /* A requestAnimationFrame timestamp marks the start of the frame, so it can
        be a few milliseconds earlier than the performance.now() taken when play
        began. A negative elapsed time would give index -1 and an undefined frame. */
-    var ms = elapsedMs > 0 ? elapsedMs : 0;
-    return Math.floor((ms / 1000) * fps) % frameCount;
+    var ms = isFinite(elapsedMs) && elapsedMs > 0 ? elapsedMs : 0;
+    var elapsedFrames = Math.floor((ms / 1000) * fps);
+    if (!isFinite(elapsedFrames)) { return 0; }
+    return ((elapsedFrames % count) + count) % count;
   }
 
   /** Expand an indexed grid to RGBA bytes at an integer scale. */
@@ -1666,7 +1729,13 @@
    * byte-for-byte reproducible and needs no library in the browser or Node.
    */
   function encodePngRgba(width, height, rgba) {
-    if (!(width > 0) || !(height > 0)) { throw new RangeError('PNG dimensions must be positive'); }
+    if (!Number.isInteger(width) || !Number.isInteger(height) || width <= 0 || height <= 0) {
+      throw new RangeError('PNG dimensions must be positive integers');
+    }
+    var expected = width * height * 4;
+    if (!rgba || typeof rgba.length !== 'number' || rgba.length !== expected) {
+      throw new RangeError('RGBA data length must be width times height times 4');
+    }
     var stride = width * 4 + 1;
     var raw = new Uint8Array(stride * height);
     for (var y = 0; y < height; y += 1) {

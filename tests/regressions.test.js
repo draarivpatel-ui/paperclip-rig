@@ -7,6 +7,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const E = require('../engine.js');
 const A = require('../assets/data.js');
+const L = require('../rig-lab.js');
 
 const pt = (x, y) => ({ x, y });
 
@@ -91,4 +92,80 @@ test('vectorAssetToSvg escapes injected markup in names and descriptions', () =>
   assert.ok(!svg.includes('<script>'), svg);
   assert.ok(!svg.includes('<img'), svg);
   assert.ok(svg.includes('&lt;script&gt;'), svg);
+});
+
+/* ---------------------- 2026-11-24 hardening audit ---------------------- */
+
+test('polylineDeviation measures distance against a singleton open polyline', () => {
+  assert.equal(E.polylineDeviation([pt(0, 0)], [pt(10, 0)], false), 10);
+  assert.equal(E.polylineDeviation([pt(0, 0), pt(20, 0)], [pt(10, 0)], false), 10);
+});
+
+test('parseSvgPath rejects junk bytes instead of silently skipping them', () => {
+  assert.throws(() => E.parseSvgPath('M0 0 junk L10 10'), /unexpected/);
+  assert.throws(() => E.parseSvgPath('M0 0L10x10'), /unexpected/);
+  assert.throws(() => E.parseSvgPath('M0 0L1e 2'), /unexpected/);
+  assert.throws(() => E.parseSvgPath('M0 0R10 10'), /unexpected/);
+});
+
+test('utf8ByteLength matches real UTF-8 replacement for lone surrogates', () => {
+  const enc = new TextEncoder();
+  ['\ud800x', 'x\udc00', '\ud800\ud800', 'ok\ud800'].forEach((s) => {
+    assert.equal(E.utf8ByteLength(s), enc.encode(s).length);
+  });
+});
+
+test('animationFrameIndex never returns NaN or a negative frame for bad timing input', () => {
+  [NaN, Infinity, -Infinity, -2, 0].forEach((fps) => {
+    assert.equal(E.animationFrameIndex(100, fps, 4), 0);
+  });
+  const i = E.animationFrameIndex(100, 6, 4.9);
+  assert.ok(Number.isInteger(i) && i >= 0 && i < 4);
+});
+
+test('packSpriteAtlasMaxRects rejects malformed frame dimensions instead of dropping frames', () => {
+  [
+    { name: 'zero', w: 0, h: 8 },
+    { name: 'negative', w: 4, h: -2 },
+    { name: 'nan', w: NaN, h: 8 },
+    { name: 'infinite', w: 4, h: Infinity },
+    { name: 'fractional', w: 4.5, h: 8 }
+  ].forEach((frame) => {
+    assert.throws(() => E.packSpriteAtlasMaxRects([frame], {}), RangeError, frame.name);
+  });
+});
+
+test('encodePngRgba rejects non-integer dimensions and truncated pixel data', () => {
+  const rgba = new Uint8Array(2 * 2 * 4);
+  assert.throws(() => E.encodePngRgba(1.5, 2, rgba), RangeError);
+  assert.throws(() => E.encodePngRgba(NaN, 2, rgba), RangeError);
+  assert.throws(() => E.encodePngRgba(2, 2, rgba.subarray(0, rgba.length - 1)), RangeError);
+});
+
+test('hexToRgb rejects malformed colour strings instead of turning them black', () => {
+  ['', '#12', '#12345', '#gggggg', 'red', null, undefined].forEach((value) => {
+    assert.throws(() => E.hexToRgb(value), /hex/i);
+  });
+});
+
+test('csvCell guards a leading line feed as spreadsheet-control whitespace', () => {
+  assert.equal(L.csvCell('\nx'), '"\'\nx"');
+});
+
+/* ---------------- accessibility: skip-link and canvas roles ---------------- */
+
+test('skip-link target main is focusable so keyboard focus actually moves', () => {
+  const fs = require('node:fs');
+  const html = fs.readFileSync(require('node:path').join(__dirname, '..', 'index.html'), 'utf8');
+  const m = html.match(/<main[^>]*id="main"[^>]*>/);
+  assert.ok(m, 'main element with id main exists');
+  assert.ok(/tabindex="-1"/.test(m[0]), 'main must carry tabindex="-1" for the skip link to move focus');
+});
+
+test('aria-labelled preview and plate canvases expose an img role for assistive tech', () => {
+  const fs = require('node:fs');
+  const html = fs.readFileSync(require('node:path').join(__dirname, '..', 'index.html'), 'utf8');
+  const m = html.match(/<canvas[^>]*id="px-preview"[^>]*>/);
+  assert.ok(m, 'px-preview canvas exists');
+  assert.ok(/role="img"/.test(m[0]), 'px-preview needs role="img" for its aria-label to be valid');
 });

@@ -720,13 +720,11 @@ test('frames that cannot fit are reported instead of dropped silently', () => {
   assert.equal(a.placements.length, 0);
 });
 
-test('an empty list and zero sized frames pack to an empty atlas', () => {
+test('an empty list packs to an empty atlas and zero sized frames are rejected', () => {
   const empty = E.packSpriteAtlasMaxRects([], {});
   assert.equal(empty.ok, true);
   assert.equal(empty.width, 0);
-  const zero = E.packSpriteAtlasMaxRects([{ name: 'z', w: 0, h: 10 }], {});
-  assert.equal(zero.placements.length, 0);
-  assert.equal(zero.ok, true);
+  assert.throws(() => E.packSpriteAtlasMaxRects([{ name: 'z', w: 0, h: 10 }], {}), RangeError);
 });
 
 test('packing is deterministic', () => {
