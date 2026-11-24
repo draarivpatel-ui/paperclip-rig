@@ -9,7 +9,7 @@
 
 ## Verification (current change)
 
-- `npm test`: 531 tests, all passing, 0 skipped.
+- `npm test`: 541 tests, all passing, 0 skipped.
 - Honesty harness (`hark_honesty_and_defect_harness.py --audit .`): 0 violations across 17 files.
 - Em/en dash scan over every tracked file: 0 matches.
 - Real headless Chromium CDP audit: 64/64 checks passed at 1440x900 and 390x844 plus a deep-link boot. 0 console errors, 0 page exceptions, 0 external requests, 0 horizontal overflow at both sizes; real pointer clicks on the Pareto markers, atlas bars, palette rows, verify, tamper and self-test controls; `Page.reload` restores `#prlab=` state.
@@ -34,7 +34,7 @@
 
 ## Verification
 
-Run the full suite with `npm test` (200 tests passing after the earlier round; the suite now stands at 531, all passing).
+Run the full suite with `npm test` (200 tests passing after the earlier round; the suite now stands at 541, all passing).
 
 <!-- verification -->
 
