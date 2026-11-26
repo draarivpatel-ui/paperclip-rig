@@ -951,3 +951,23 @@ textarea {
     scroll-behavior: auto !important;
   }
 }
+
+@media print {
+  @page { margin: 0.5in; }
+  :root {
+    --paper: #fff; --tray: #fff; --paper-deep: #f4f4f4; --ink: #111;
+    --ink-muted: #333; --rule: #aaa; --rule-strong: #777; --scrim: transparent;
+  }
+  body { background: #fff !important; color: #111 !important; }
+  .skip-link, .site-nav, .controls, button, input, select, textarea { display: none !important; }
+  .masthead { padding-left: 0 !important; padding-right: 0 !important; }
+  .hero, .vector-workspace, .ledger-wrap, .pixel-grid, .atlas-grid,
+  .lab-pair, .method, .export-box { display: block !important; }
+  .plate-mirror, .atlas-plate { position: static !important; }
+  .plate-frame, .lab-chart-frame, .specimen figure, .lab-wide {
+    background: #fff !important; box-shadow: none !important; border-color: #777 !important;
+  }
+  .bench, .specimens, .method, .plate, .preview-card, .lab-panel { break-inside: avoid; }
+  .lab-table-wrap { overflow: visible !important; }
+  svg, canvas { max-width: 100% !important; height: auto !important; }
+}
