@@ -623,8 +623,9 @@
    * quotes and newlines.
    */
   function csvCell(v) {
+    var numeric = typeof v === 'number' && isFinite(v);
     var s = v === null || v === undefined ? '' : String(v);
-    if (/^[\t\r\n =+\-@]/.test(s)) { s = "'" + s; }
+    if (!numeric && /^[\s\p{Cf}\p{Cc}]*[=+\-@\t\r\n ]/u.test(s)) { s = "'" + s; }
     if (/[",\n\r]/.test(s)) { s = '"' + s.replace(/"/g, '""') + '"'; }
     return s;
   }
